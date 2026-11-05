@@ -1,0 +1,446 @@
+:root {
+  --bg-1: #120006;
+  --bg-2: #2a000c;
+  --bg-3: #4a0016;
+  --pink: #ff4d8d;
+  --pink-soft: #ff8fb3;
+  --red: #b0002a;
+  --red-deep: #5c0014;
+  --text: #ffd6e2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% 30%, var(--bg-3), transparent 45%),
+    radial-gradient(circle at 20% 80%, #3d0011, transparent 40%),
+    linear-gradient(135deg, var(--bg-1), var(--bg-2) 50%, #1a0008);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- background effects ---------- */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035) 0px,
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+  z-index: 2;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+  z-index: 2;
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 10px var(--pink);
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.7);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-110vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* ---------- main scene ---------- */
+.scene {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 24px;
+  max-width: 980px;
+}
+
+.face-wrap {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin: 0 auto 26px;
+  display: grid;
+  place-items: center;
+}
+
+.halo {
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 77, 141, 0.35), transparent 65%);
+  filter: blur(14px);
+  animation: haloPulse 3s ease-in-out infinite;
+}
+
+@keyframes haloPulse {
+  0%,
+  100% {
+    transform: scale(0.95);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+.face {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #ffb3cc, transparent 22%),
+    radial-gradient(circle at 70% 75%, #ff6fa5, transparent 25%),
+    linear-gradient(145deg, var(--pink-soft), var(--red));
+  box-shadow:
+    0 0 34px rgba(255, 77, 141, 0.65),
+    0 0 90px rgba(176, 0, 42, 0.45),
+    inset -12px -18px 30px rgba(0, 0, 0, 0.25);
+  animation: faceFloat 4s ease-in-out infinite;
+}
+
+@keyframes faceFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+/* eyes */
+.eye {
+  position: absolute;
+  top: 70px;
+  width: 18px;
+  height: 26px;
+  border-radius: 50%;
+  background: #2a0010;
+  box-shadow: 0 0 8px #ffd6e2;
+  animation: blink 3.6s infinite;
+}
+
+.eye.left {
+  left: 62px;
+}
+
+.eye.right {
+  right: 62px;
+}
+
+@keyframes blink {
+  0%,
+  44%,
+  48%,
+  100% {
+    transform: scaleY(1);
+  }
+  46%,
+  47% {
+    transform: scaleY(0.08);
+  }
+}
+
+/* tears */
+.tear {
+  position: absolute;
+  top: 98px;
+  width: 8px;
+  height: 14px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: linear-gradient(to bottom, #fff, #8fd8ff);
+  box-shadow: 0 0 10px #8fd8ff;
+  opacity: 0;
+}
+
+.tear.left {
+  left: 67px;
+  animation: tearDrop 2.8s infinite 0.6s;
+}
+
+.tear.right {
+  right: 67px;
+  animation: tearDrop 2.8s infinite 1.4s;
+}
+
+@keyframes tearDrop {
+  0% {
+    transform: translateY(0) scale(0.7);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(48px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* sad mouth */
+.mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 44px;
+  width: 52px;
+  height: 24px;
+  transform: translateX(-50%) rotate(180deg);
+  border-top: 5px solid #2a0010;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  filter: drop-shadow(0 0 5px rgba(255, 77, 141, 0.7));
+}
+
+/* blush */
+.blush {
+  position: absolute;
+  bottom: 58px;
+  width: 28px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  filter: blur(5px);
+  animation: blushPulse 2.4s ease-in-out infinite;
+}
+
+.blush.left {
+  left: 26px;
+}
+
+.blush.right {
+  right: 26px;
+}
+
+@keyframes blushPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.12);
+  }
+}
+
+/* ---------- text ---------- */
+.title {
+  position: relative;
+  margin: 0 auto 12px;
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow:
+    0 0 8px rgba(255, 77, 141, 0.9),
+    0 0 28px rgba(176, 0, 42, 0.8);
+}
+
+.title::before,
+.title::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.title::before {
+  color: #ff1f5a;
+  transform: translateX(-2px);
+  clip-path: inset(0 0 55% 0);
+  animation: glitchTop 2.4s infinite linear alternate-reverse;
+}
+
+.title::after {
+  color: #ff9cc2;
+  transform: translateX(2px);
+  clip-path: inset(55% 0 0 0);
+  animation: glitchBottom 2.9s infinite linear alternate-reverse;
+}
+
+@keyframes glitchTop {
+  0%,
+  92%,
+  100% {
+    transform: translateX(-2px);
+  }
+  93% {
+    transform: translateX(-8px);
+  }
+  95% {
+    transform: translateX(6px);
+  }
+  97% {
+    transform: translateX(-4px);
+  }
+}
+
+@keyframes glitchBottom {
+  0%,
+  90%,
+  100% {
+    transform: translateX(2px);
+  }
+  91% {
+    transform: translateX(7px);
+  }
+  94% {
+    transform: translateX(-6px);
+  }
+  96% {
+    transform: translateX(4px);
+  }
+}
+
+.subtitle {
+  margin: 0 0 28px;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pink-soft);
+  text-shadow: 0 0 14px rgba(255, 77, 141, 0.65);
+}
+
+.emoji {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 1.35em;
+  animation: emojiSwing 2.2s ease-in-out infinite;
+}
+
+@keyframes emojiSwing {
+  0%,
+  100% {
+    transform: rotate(-8deg) translateY(0);
+  }
+  50% {
+    transform: rotate(8deg) translateY(-4px);
+  }
+}
+
+.hint {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 214, 226, 0.65);
+  text-transform: uppercase;
+}
+
+.cursor {
+  animation: cursorBlink 1s steps(1) infinite;
+  color: var(--pink);
+}
+
+@keyframes cursorBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .face-wrap {
+    width: 190px;
+    height: 190px;
+  }
+
+  .face {
+    width: 160px;
+    height: 160px;
+  }
+
+  .eye {
+    top: 55px;
+    width: 15px;
+    height: 22px;
+  }
+
+  .eye.left {
+    left: 48px;
+  }
+
+  .eye.right {
+    right: 48px;
+  }
+
+  .tear {
+    top: 80px;
+  }
+
+  .tear.left {
+    left: 53px;
+  }
+
+  .tear.right {
+    right: 53px;
+  }
+
+  .mouth {
+    bottom: 34px;
+    width: 44px;
+    height: 20px;
+  }
+
+  .blush {
+    bottom: 46px;
+  }
+
+  .blush.left {
+    left: 20px;
+  }
+
+  .blush.right {
+    right: 20px;
+  }
+}
